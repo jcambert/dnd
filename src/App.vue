@@ -1,22 +1,28 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    
+    <DragNDrop/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+/* eslint-disable */
+import DragNDrop from './components/DragDrop.vue'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    DragNDrop
+  },
+  mounted:function(){
+    //console.log(window.DND);
+    window.DND();
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "./assets/styles/main.scss";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
