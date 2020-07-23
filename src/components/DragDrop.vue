@@ -1,5 +1,15 @@
 <template>
   <div>
+  <section>
+    <div class="liste">
+        <ol class="droppable">
+          <li class="draggable" data-value="data1">List Item 1</li>
+          <li class="draggable" data-value="data2">List Item 2</li>
+          <li class="draggable" data-value="data3">List Item 3</li>
+      </ol>
+    </div>
+  </section>
+  <div class="play">
     <section class="draggable-elements">
       <i class="fas fa-cat draggable" style="color: #ff6384;" id="cat"></i>
       <i class="fas fa-dog draggable"  style="color: #36a2eb;" id="dog"></i>
@@ -11,31 +21,32 @@
       <i class="fas fa-spider draggable" style="color: #ff99cc;" id="spider"></i>
     </section>
     <section class="droppable-elements">
-      <div class="droppable" data-draggable-id="frog" draggable="false">
+      <div class="droppable" data-draggable-id="frog" >
         <span>Frog</span>
       </div>
-      <div class="droppable" data-draggable-id="dove" draggable="false">
+      <div class="droppable" data-draggable-id="dove" >
         <span>Bird</span>
       </div>
-      <div class="droppable" data-draggable-id="cat" draggable="false">
+      <div class="droppable" data-draggable-id="cat" >
         <span>Cat</span>
       </div>
-      <div class="droppable" data-draggable-id="fish" draggable="false">
+      <div class="droppable" data-draggable-id="fish" >
         <span>Fish</span>
       </div>
-      <div class="droppable" data-draggable-id="dog" draggable="false">
+      <div class="droppable" data-draggable-id="dog" >
         <span>Dog</span>
       </div>
-      <div class="droppable" data-draggable-id="spider" draggable="false">
+      <div class="droppable" data-draggable-id="spider" >
         <span>Spider</span>
       </div>
-      <div class="droppable" data-draggable-id="horse" draggable="false">
+      <div class="droppable" data-draggable-id="horse" >
         <span>Horse</span>
       </div>
-      <div class="droppable" data-draggable-id="hippo" draggable="false">
+      <div class="droppable" data-draggable-id="hippo">
         <span>Hippo</span>
       </div>
     </section>
+    </div>
   </div>
 </template>
 <script>

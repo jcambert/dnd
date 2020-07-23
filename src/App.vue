@@ -16,7 +16,7 @@ export default {
   },
   mounted:function(){
     //console.log(window.DND);
-    window.DND();
+    window.DND("div.play", {mode:"add"});
   }
 }
 </script>

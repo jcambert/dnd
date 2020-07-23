@@ -16,7 +16,7 @@ body {
   justify-content: center;
   margin: 2rem;
 }
-.draggable {
+.draggable:not(li) {
   height: 5rem;
   width: 5rem;
   display: flex;
@@ -30,7 +30,7 @@ body {
 .draggable:hover {
   opacity: 0.5;
 }
-.droppable {
+.droppable:not(ol) {
   height: 6.5rem;
   width: 6.5rem;
   margin: 1rem auto;
