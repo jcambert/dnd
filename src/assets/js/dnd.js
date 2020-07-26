@@ -1,7 +1,7 @@
 /* eslint-disable */
 //@see https://codepen.io/Coding_Journey/pen/YzKpLvE
 import { fromEvent } from 'rxjs';
-import { takeUntil, mergeMap, flatMap, map, merge, switchMap } from 'rxjs/operators';
+import { takeUntil, mergeMap, flatMap, map, merge, switchMap,filter } from 'rxjs/operators';
 
 (function (global, factory) {
     "use strict";
@@ -30,6 +30,22 @@ import { takeUntil, mergeMap, flatMap, map, merge, switchMap } from 'rxjs/operat
     var draggedElement=null;
     var document=window.document;
     var root=null;
+    function getAttribute(elt,name){
+        if(elt==null ||name==null)return null;
+        var result=elt.getAttribute(name);
+        return (result==null || result=="")?null:result;
+    }
+    function getDroppableParent(elt,ctx){
+        var result=elt;
+        try{
+            while (result.className.split(" ").indexOf(ctx.droppable) == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
+                result = result.parentNode;
+            }
+        }catch{
+            result=null;
+        }
+        return result;
+    }
     var onDragStart = function (evt, ctx) {
        // console.log("Drag Start:", evt);
         draggedElement=evt.target;
@@ -37,7 +53,7 @@ import { takeUntil, mergeMap, flatMap, map, merge, switchMap } from 'rxjs/operat
         evt.dataTransfer.setData("text/plain", evt.target.id);
     }
     var onDragEnter = function (evt, ctx) {
-       // console.log("Drag Enter:", evt);
+        //console.log("Drag Enter:", evt);
         if (!evt.target.classList.contains(ctx.dropped)) {
             evt.target.classList.add(ctx.droppablehover);
         }
@@ -60,18 +76,9 @@ import { takeUntil, mergeMap, flatMap, map, merge, switchMap } from 'rxjs/operat
         var target = evt.target,source=draggedElement.parentNode,  clonedElement = draggedElement.cloneNode(true); // On créé immédiatement le clone de cet élément
         console.log("source",source.className,"target",target);
 
-        while (target.className.split(" ").indexOf(ctx.droppable) == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
-            console.log("finding target parent droppable area")
-            target = target.parentNode;
-        }
-        try{
-            while (source.className.split(" ").indexOf(ctx.droppable) == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
-                console.log("finding source parent droppable area")
-                source = source.parentNode;
-            }
-        }catch{
-            source=null;
-        }
+        target=getDroppableParent(target,ctx);
+        source=getDroppableParent(source,ctx);
+
         console.log("source",source,"target",target);
         if(source==target){
             console.log("Source==target => voir mode insertion ou invertion")
@@ -100,14 +107,26 @@ import { takeUntil, mergeMap, flatMap, map, merge, switchMap } from 'rxjs/operat
 
     }
 
+    var dropFilter = function(evt,ctx){
+        //console.log("drop filter",evt.target);
+        var result=false;
+        var acceptSource=getAttribute(draggedElement,"data-draggable-type");
+        var acceptDest=getAttribute(getDroppableParent(evt.target,ctx),"data-draggable-accept");
+        //console.log(acceptSource,acceptDest);
+        if( acceptSource==null&&acceptDest!=null ) return false;
+        result= acceptDest==acceptSource;
+        //console.log("Drop Filter result:",result);
+        return result;
+    }
+
     function applyDragEvents(element,ctx){
         element.draggable = true;
         //console.log("applyDragEvents",element);
 
         //console.log(elt)
         fromEvent(element,'dragstart').subscribe(evt => ctx.onDragStart(evt, ctx));
-        fromEvent(element, 'dragenter').subscribe(evt => ctx.onDragEnter(evt, ctx));
-        fromEvent(element, 'dragover').subscribe(evt => ctx.onDragOver(evt, ctx));
+        fromEvent(element, 'dragenter').pipe(filter(evt=>ctx.dropFilter(evt,ctx))).subscribe(evt => ctx.onDragEnter(evt, ctx));
+        fromEvent(element, 'dragover').pipe(filter(evt=>ctx.dropFilter(evt,ctx))).subscribe(evt => ctx.onDragOver(evt, ctx));
         fromEvent(element, 'dragleave').subscribe(evt => ctx.onDragLeave(evt, ctx));
         
     }
@@ -124,6 +143,7 @@ import { takeUntil, mergeMap, flatMap, map, merge, switchMap } from 'rxjs/operat
             onDragOver: onDragOver,
             onDragLeave: onDragLeave,
             onDrop: onDrop,
+            dropFilter:dropFilter,
             onDropped:onDropped
         },
         DND = function (selector, opts) {
@@ -136,22 +156,22 @@ import { takeUntil, mergeMap, flatMap, map, merge, switchMap } from 'rxjs/operat
             if(selector==null ||selector=="undefined")
                 selector=document;
             else if((typeof selector)==(typeof "")){
-                console.log(selector);
+                //console.log(selector);
                 selector=document.querySelector(selector);
-                console.log(selector);
+                //console.log(selector);
             }
             root=selector;
-            console.log(root);
+            //console.log(root);
             const o = Object.assign({}, options, opts)
             const draggables = root.querySelectorAll(`.${o.draggable}`);
             const droppables = root.querySelectorAll(`.${o.droppable}`);
             draggables.forEach(d=>d.draggable=true);
-            console.log(draggables);
+            //console.log(draggables);
             const dragStart = fromEvent(draggables, 'dragstart');
-            const dragEnter = fromEvent(droppables, 'dragenter');
-            const dragOver = fromEvent(droppables, 'dragover');
+            const dragEnter = fromEvent(droppables, 'dragenter').pipe(filter(evt=>o.dropFilter(evt,o)));
+            const dragOver = fromEvent(droppables, 'dragover').pipe(filter(evt=>o.dropFilter(evt,o)));
             const dragLeave = fromEvent(droppables, 'dragleave');
-            const drop = fromEvent(droppables, 'drop');
+            const drop = fromEvent(droppables, 'drop').pipe(filter(evt=>o.dropFilter(evt,o)));
 
             dragStart.subscribe(evt => o.onDragStart(evt, o));
             dragEnter.subscribe(evt => o.onDragEnter(evt, o));

@@ -1,0 +1,103 @@
+.resizable{
+  background: red;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+}
+$handlerSize:16px;
+$borderColor:rgb(96, 163, 122);
+.drag-resize {
+    position: absolute;
+    border: 1px dashed transparent;
+    z-index: 999;
+    padding: 5px;
+    margin-top: -5px;
+    margin-left: -5px;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    /*transition: all 0.1s linear;*/
+    &:hover {
+        border-color:$borderColor;
+        cursor: move;
+        display: block;
+        & .drag-resize-handlers {
+            display: block;
+          }
+      }
+      
+  }
+  .drag-resize .drag-resize-handlers {
+    opacity: 1;
+  }
+  .drag-resize-handlers{
+    position: absolute;
+    display: none;
+    width: $handlerSize;
+    height: $handlerSize;
+    font-size: 1px;
+    background: $borderColor;
+    -webkit-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+    opacity: 0;
+    border: 1px solid rgb(255, 255, 255);
+    &:hover {
+        transform: scale(2); /*chrome*/
+        -webkit-transform: scale(2); /*nodewebkit*/
+      }
+      &[data-direction="right"]{
+        top: 50%;
+        right: $handlerSize/-2;
+        cursor: e-resize;
+      }
+      &[data-direction="topright"]{
+        top: $handlerSize/-2;
+        right: $handlerSize/-2;
+        cursor: ne-resize;
+      }
+      &[data-direction="bottomright"]{
+        bottom: $handlerSize/-2;
+        right: $handlerSize/-2;
+        cursor: se-resize;
+      }
+
+      &[data-direction="left"]{
+        top: 50%;
+        left: $handlerSize/-2;
+        cursor: w-resize;
+      }
+      &[data-direction="topleft"]{
+        top: $handlerSize/-2;
+        left: $handlerSize/-2;
+        cursor: nw-resize;
+      }
+      &[data-direction="bottomleft"]{
+        bottom: $handlerSize/-2;
+        left: $handlerSize/-2;
+        cursor: sw-resize;
+      }
+
+      &[data-direction="top"]{
+        top: $handlerSize/-2;
+        left: 50%;
+        cursor: n-resize;
+      }
+      &[data-direction="bottom"]{
+        left: 50%;
+        bottom: $handlerSize/-2;;
+        cursor: s-resize;
+      }
+      &>.drag-resize-handlers-tooltip{
+        position: relative;
+        background-color: blue;
+        width: 100px;
+        height: 50px;
+        left:100px;
+        content: "tptp";
+        visibility: hidden;
+        & .show{
+          visibility: visible;
+        }
+      }
+  }
