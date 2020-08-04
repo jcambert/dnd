@@ -1,8 +1,18 @@
 <template>
   <div id="app">
-    <div id="logo" alt="Vue logo"></div>
     <div id="mousepos"></div>
     <DragNDrop/>
+    <div class="container">
+      <div class="grid-container">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+      </div>
+    </div>
+    <div id="logo" alt="Vue logo">
+      <div style="width:100px;border:1px">TOTO</div>
+    </div>
   </div>
 </template>
 
@@ -20,8 +30,11 @@ export default {
     //console.log(window.DND);
     window.DND("div.play", {mode:"invert"});
     window.DND("div.liste", {mode:"insert"});
-    var res=resize(document.getElementById("logo"),{direction:"left", debug:true});
-    res.setLeft(200,200);
+    var res=resize(document.getElementById("logo"),{/*directions:["left","right","rightbottom","top"],*/ minWidth:100,stepX:100,stepY:1, debug:true});
+    res.setTop(0);
+    res.setLeft(0);
+    res.setWidth(100);
+    res.setHeight(100);
     position(document,document.getElementById("mousepos"));
   }
 }
@@ -30,6 +43,7 @@ export default {
 <style lang="scss">
 @import "./assets/styles/main.scss";
 @import "./assets/styles/resize.scss";
+@import "./assets/styles/grid.scss";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -54,3 +68,4 @@ export default {
   text-align:left ;
 }
 </style>
+

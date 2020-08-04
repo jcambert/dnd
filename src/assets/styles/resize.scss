@@ -42,6 +42,12 @@ $borderColor:rgb(96, 163, 122);
     transition: all 0.1s linear;
     opacity: 0;
     border: 1px solid rgb(255, 255, 255);
+    &.is-active{
+      background-color:red ;
+      transform: scale(2); /*chrome*/
+      -webkit-transform: scale(2); /*nodewebkit*/
+      display: block;
+    }
     &:hover {
         transform: scale(2); /*chrome*/
         -webkit-transform: scale(2); /*nodewebkit*/
@@ -51,12 +57,12 @@ $borderColor:rgb(96, 163, 122);
         right: $handlerSize/-2;
         cursor: e-resize;
       }
-      &[data-direction="topright"]{
+      &[data-direction="topright"],&[data-direction="righttop"]{
         top: $handlerSize/-2;
         right: $handlerSize/-2;
         cursor: ne-resize;
       }
-      &[data-direction="bottomright"]{
+      &[data-direction="bottomright"],&[data-direction="rightbottom"]{
         bottom: $handlerSize/-2;
         right: $handlerSize/-2;
         cursor: se-resize;
@@ -67,12 +73,12 @@ $borderColor:rgb(96, 163, 122);
         left: $handlerSize/-2;
         cursor: w-resize;
       }
-      &[data-direction="topleft"]{
+      &[data-direction="topleft"],&[data-direction="lefttop"]{
         top: $handlerSize/-2;
         left: $handlerSize/-2;
         cursor: nw-resize;
       }
-      &[data-direction="bottomleft"]{
+      &[data-direction="bottomleft"],&[data-direction="leftbottom"]{
         bottom: $handlerSize/-2;
         left: $handlerSize/-2;
         cursor: sw-resize;
