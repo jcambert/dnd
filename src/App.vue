@@ -30,12 +30,15 @@ export default {
     //console.log(window.DND);
     window.DND("div.play", {mode:"invert"});
     window.DND("div.liste", {mode:"insert"});
-    var res=resize(document.getElementById("logo"),{/*directions:["left","right","rightbottom","top"],*/ minWidth:100,stepX:100,stepY:1, debug:true});
+    var res=resize(document.getElementById("logo"),{/*directions:["left","right","rightbottom","top"],*/maxHeight:300,minHeight:100, minWidth:100,maxWidth:400,stepX:100,stepY:1, debug:true});
     res.setTop(0);
     res.setLeft(0);
     res.setWidth(100);
     res.setHeight(100);
     position(document,document.getElementById("mousepos"));
+    res.onResized(opt=>console.log(opt));
+    //res.canStretchTop(false);
+    //res.canStretchBottom(false);
   }
 }
 </script>

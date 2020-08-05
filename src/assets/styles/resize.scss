@@ -42,6 +42,7 @@ $borderColor:rgb(96, 163, 122);
     transition: all 0.1s linear;
     opacity: 0;
     border: 1px solid rgb(255, 255, 255);
+    
     &.is-active{
       background-color:red ;
       transform: scale(2); /*chrome*/
@@ -51,6 +52,9 @@ $borderColor:rgb(96, 163, 122);
     &:hover {
         transform: scale(2); /*chrome*/
         -webkit-transform: scale(2); /*nodewebkit*/
+      }
+      &.disable{
+        display: none !important;
       }
       &[data-direction="right"]{
         top: 50%;
